@@ -1,0 +1,9 @@
+Code snippets to run in case things go awry
+
+// Hard reset the generated client (clears stale state) * run these from server
+rm -rf node_modules/.prisma
+rm -rf node_modules/@prisma/client
+npm install
+npx prisma generate
+// Now verify the generated folder exists:
+ls -la node_modules/.prisma/client | head

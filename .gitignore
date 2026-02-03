@@ -1,0 +1,20 @@
+# dependencies
+**/node_modules/
+
+# env files
+**/.env
+**/.env.*
+
+# builds
+**/dist/
+**/build/
+
+# databases
+**/*.db
+**/*.sqlite
+
+# logs
+*.log
+
+# OS
+.DS_Store
