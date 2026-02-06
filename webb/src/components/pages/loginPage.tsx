@@ -1,27 +1,25 @@
-import { useNavigate } from "react-router-dom";
+import { SignIn, SignedIn, useUser } from "@clerk/clerk-react";
 
 export default function LoginPage() {
-    const navigate = useNavigate();
-
-    //temp... this will become auth0
-    function handleLogin() {
-        //placeholder only...
-        navigate("/user");
-    }
-
-    function createUser() {
-        navigate("/user");
-    }
+    //const { isSignedIn } = useUser(); 
 
     return (
-        <div style={{ maxWidth: 700, margin: "40px auto", fontFamily: "system-ui" }}>
-            <h1>Login</h1>
-            <p>This is a placeholder login page. Next step is wiring Auth0</p>
-
-            <div style={{ display: "flex", gap: 12 }}>
-                <button onClick={handleLogin}>Log in</button>
-                <button onClick={createUser}>Create Account</button>
-            </div>
+        <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+            minHeight: '100vh',
+            flexDirection: 'column',
+            gap: '20px'
+        }}>
+            <h1>Welcome Back!</h1>
+            <SignIn 
+                signUpUrl="/"
+                fallbackRedirectUrl="/app/user"
+            />
+            <SignedIn>
+                <p>Redirecting...</p>
+            </SignedIn>
         </div>
     );
 }

@@ -1,20 +1,27 @@
-export async function http<T>(
-    url: string,
-    options?: RequestInit
-): Promise<T> {
-    const res = await fetch(url, {
-        headers: { "Content-Type": "application/json" },
-        ...options,
-    });
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `Request failed: ${res.status}`);
-    }
+import { useAuth } from '@clerk/clerk-react';
 
-    //for Delete / 204 responses
-    if (res.status === 204) {
-        return undefined as T;
-    }
+const API_BASE_URL = 'http://localhost:3000';
 
-    return res.json() as Promise<T>;
-}
+export const useApi = () => {
+    const { getToken } = useAuth();
+
+    const fetchWithAuth = async (endpoint: string, options: RequestInit = {}) => {
+        try {
+            const token = await getToken();
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                ...options,
+                headers: {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('API request failed', error);
+            throw error;
+        }
+    };
+    return { fetchWithAuth };
+};

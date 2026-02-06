@@ -1,8 +1,26 @@
-import { useNavigate } from "react-router-dom";
+import { useUser } from '@clerk/clerk-react';
+import { useEffect, useState } from 'react';
+import { useApi } from '../../api/http';
 
 export default function UserHomePage() {
-    const navigate = useNavigate();
+    const { user, isLoaded } = useUser();
+    const { fetchWithAuth } = useApi();
+    const [dbUser, setDbUser] = useState<any>(null);
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const data = await fetchWithAuth('/api/users/me');
+                setDbUser(data);
+                console.log('User synced to database', data);
+            } catch (error) {
+                console.error('Failed to fetch ')
+            }
+        }
+        if (isLoaded && user) fetchUserData();
+    }, [isLoaded, user]);
+
+    if (!isLoaded) return (<div>Loading...</div>);
 
     return (
         <div style={{ maxWidth: 700, margin: "40px auto", fontFamily: "system-ui" }}>

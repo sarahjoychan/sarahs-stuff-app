@@ -9,3 +9,6 @@ if (!url) throw new Error("DATABASE_URL is missing");
 export const prisma = new PrismaClient({ 
     adapter: new PrismaBetterSqlite3({ url }),
 });
+
+console.log("SERVER DATABASE_URL:", process.env.DATABASE_URL);
+console.log("SERVER CWD:", process.cwd());
